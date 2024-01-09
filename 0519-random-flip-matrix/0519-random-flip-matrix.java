@@ -1,9 +1,8 @@
 class Solution {
-    private int currentRow = 0;
-    private int currentCol = 0;
-    private int totalRows = 0;
-    private int totalCols = 0;
-    private boolean matrixFlipped = false;
+    int currentRow = 0;
+    int currentCol = 0;
+    int totalRows = 0;
+    int totalCols = 0;
 
     public Solution(int totalRows, int totalCols) {
         this.totalRows = totalRows;
@@ -11,7 +10,7 @@ class Solution {
     }
 
     public int[] flip() {
-        if (matrixFlipped || currentRow == totalRows) {
+        if (currentRow >= totalRows || currentCol >= totalCols) {
             return null;  // All cells are flipped or matrix has been reset
         }
 
@@ -24,7 +23,8 @@ class Solution {
         }
 
         if (currentRow == totalRows) {
-            matrixFlipped = true;
+            currentRow = 0;
+            currentCol = 0;
         }
 
         return result;
