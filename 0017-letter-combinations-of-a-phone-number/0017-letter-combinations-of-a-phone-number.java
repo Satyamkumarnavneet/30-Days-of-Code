@@ -1,12 +1,11 @@
 class Solution {
-    private Map<Character, String> digitToLetters = new HashMap<>();
-    private List<String> resultList = new ArrayList<>();
-
-    public List<String> letterCombinations(String digits) {
+    public static List<String> letterCombinations(String digits) {
+        List<String> result = new ArrayList<>();
         if (digits == null || digits.length() == 0) {
-            return resultList;
+            return result;
         }
 
+        Map<Character, String> digitToLetters = new HashMap<>();
         digitToLetters.put('2', "abc");
         digitToLetters.put('3', "def");
         digitToLetters.put('4', "ghi");
@@ -16,26 +15,24 @@ class Solution {
         digitToLetters.put('8', "tuv");
         digitToLetters.put('9', "wxyz");
 
-        generateCombinations(digits, 0, new StringBuilder());
-        return resultList;
+        generateCombinations(digits, 0, new StringBuilder(), digitToLetters, result);
+        return result;
     }
 
-    private void generateCombinations(String digits, int currentIndex, StringBuilder currentCombination) {
-        if (currentIndex == digits.length()) {
-            resultList.add(currentCombination.toString());
+    private static void generateCombinations(String digits, int index, StringBuilder current,
+    Map<Character, String> digitToLetters, List<String> result) {
+        if (index == digits.length()) {
+            result.add(current.toString());
             return;
         }
 
-        char currentDigit = digits.charAt(currentIndex);
-        String letterOptions = digitToLetters.get(currentDigit);
+        char digit = digits.charAt(index);
+        String letters = digitToLetters.get(digit);
 
-        if (letterOptions != null) {
-            for (int i = 0; i < letterOptions.length(); i++) {
-                char letter = letterOptions.charAt(i);
-                currentCombination.append(letter);
-                generateCombinations(digits, currentIndex + 1, currentCombination);
-                currentCombination.deleteCharAt(currentCombination.length() - 1);
-            }
+        for (char letter : letters.toCharArray()) {
+            current.append(letter);
+            generateCombinations(digits, index + 1, current, digitToLetters, result);
+            current.deleteCharAt(current.length() - 1);
         }
     }
 }
