@@ -1,14 +1,22 @@
 class DataStream {
-    private int val, k, count;
+    int val = 0;
+    int k = 0; 
+    int count = 0;
+
     public DataStream(int value, int k) {
-        this.val = value;
+        val = value;
         this.k = k;
-        this.count = 0;
     }
     
     public boolean consec(int num) {
-        count = (num == val) ? count + 1 : 0;
-        return count >=k;
+        if(num == val){
+            count++;
+        } else{
+            count = 0;
+        }
+        if(count >= k){
+            return true;
+        }
+        return false;
     }
 }
-
