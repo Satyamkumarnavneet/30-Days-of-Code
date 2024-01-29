@@ -1,56 +1,40 @@
 class Solution {
     
-    int ans =  1;
-    
+    int max = 0;
     public int maxProduct(String s) {
         
-        int[][] dp = new int[s.length() + 1][s.length() + 1];
+        char[] c = s.toCharArray();
+        dfs(c, 0, "", "");
         
-        for(int[] d: dp)
-            Arrays.fill(d, -1);
-        
-        int res = solve(s, "", "", 0, dp);
-        
-        return res;
-        
+        return max;
     }
-    public int solve(String s, String s1, String s2, int i, int[][] dp)
-    {
-        int s1l = s1.length();
-        int s2l = s2.length();
+    
+    public void dfs(char[] c, int i, String s1, String s2){
         
-        
-
-        if(isPali(s1) && isPali(s2))
-        {
-            ans = Math.max(ans, s1.length()*s2.length());
+        if(i >= c.length){
+            
+            if(isPalin(s1) && isPalin(s2))
+                max = Math.max(max, s1.length()*s2.length());
+            return;
         }
         
-        dp[s1l][s2l] = ans;
-        
-        
-        if(i >= s.length())
-        {
-            return dp[s1l][s2l];
-        }
-           
-        int op1 = solve(s, s1 + s.charAt(i), s2, i + 1, dp);
-        int op2 = solve(s, s1, s2 + s.charAt(i), i + 1, dp);
-        int op3 = solve(s, s1, s2, i + 1, dp);
-        
-        return dp[s1l][s2l];
+        dfs(c, i+1, s1+c[i], s2);
+        dfs(c, i+1, s1, s2+c[i]);
+        dfs(c, i+1, s1, s2);
     }
-    public boolean isPali(String s)
-    {
-        int i = 0;
-        int j = s.length() - 1;
-        while(i < j)
-        {
-            if(s.charAt(i) != s.charAt(j))
+    
+     public boolean isPalin(String str){
+ 
+        int i = 0, j = str.length() - 1;
+ 
+        while (i < j) {
+ 
+            if (str.charAt(i) != str.charAt(j))
                 return false;
             i++;
             j--;
         }
+ 
         return true;
     }
 }
