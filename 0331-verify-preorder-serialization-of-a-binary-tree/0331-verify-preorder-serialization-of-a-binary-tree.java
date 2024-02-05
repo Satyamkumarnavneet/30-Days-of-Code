@@ -1,19 +1,20 @@
 class Solution {
     public boolean isValidSerialization(String preorder) {
         String[] nodes = preorder.split(",");
-        Stack<String> stack = new Stack<>();
+        int nullCount = 0; // Counter for null nodes
 
         for (String node : nodes) {
-            while (node.equals("#") && !stack.isEmpty() && stack.peek().equals("#")) {
-                stack.pop(); // Pop two consecutive '#' and their parent node
-                if (stack.isEmpty()) {
-                    return false; // Invalid serialization
-                }
-                stack.pop();
+            if (nullCount > 0) {
+                return false; // If nullCount is already greater than 0, the serialization is invalid
             }
-            stack.push(node); // Push the current node onto the stack
+
+            if (node.equals("#")) {
+                nullCount++; // Increment nullCount for null nodes
+            } else {
+                nullCount--; // Decrement nullCount for non-null nodes
+            }
         }
 
-        return stack.size() == 1 && stack.peek().equals("#");
+        return nullCount == 1; // The valid serialization should end with nullCount equal to 1
     }
 }
