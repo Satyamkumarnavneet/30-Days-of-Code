@@ -1,53 +1,53 @@
-class WordDictionary {
-  class Node {
-    Node[] next;
-    boolean isWord;
+class TrieNode {
+    Map<Character, TrieNode> children;
+    boolean isEnd;
 
-    Node() {
-      next = new Node[26];
+    public TrieNode() {
+        children = new HashMap<>();
+        isEnd = false;
     }
-  }
+}
 
-  private Node root;
+public class WordDictionary {
+    private TrieNode root;
 
-  public WordDictionary() {
-    root = new Node();
-  }
-  
-  public void addWord(String word) {
-    var node = root;
-
-    for (var c : word.toCharArray()) {
-      var i = c - 'a';
-      
-      if (node.next[i] == null)
-        node.next[i] = new Node();
-      
-      node = node.next[i];
+    public WordDictionary() {
+        root = new TrieNode();
     }
-    node.isWord = true;
-  }
 
-  private boolean search(String word, int idx, Node node) {
-    if (idx == word.length())
-      return node == null || node.isWord;
-
-    for (var i = idx; i < word.length() && node != null; i++) {
-      var c = word.charAt(i);
-
-      if (c == '.') {
-        for (var nextNode : node.next)
-          if (nextNode != null && search(word, i+1, nextNode))
-            return true;
-        
-        return false;
-      }
-      node = node.next[c - 'a'];
+    public void addWord(String word) {
+        TrieNode node = root;
+        for (char ch : word.toCharArray()) {
+            if (!node.children.containsKey(ch)) {
+                node.children.put(ch, new TrieNode());
+            }
+            node = node.children.get(ch);
+        }
+        node.isEnd = true;
     }
-    return node != null && node.isWord;
-  }
-  
-  public boolean search(String word) {
-    return search(word, 0, root);
-  }
+
+    public boolean search(String word) {
+        return searchHelper(word, 0, root);
+    }
+
+    private boolean searchHelper(String word, int index, TrieNode node) {
+        if (index == word.length()) {
+            return node.isEnd;
+        }
+
+        char ch = word.charAt(index);
+        if (ch == '.') {
+            for (TrieNode child : node.children.values()) {
+                if (searchHelper(word, index + 1, child)) {
+                    return true;
+                }
+            }
+            return false;
+        } else {
+            if (!node.children.containsKey(ch)) {
+                return false;
+            }
+            return searchHelper(word, index + 1, node.children.get(ch));
+        }
+    }
 }
